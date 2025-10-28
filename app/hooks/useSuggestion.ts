@@ -1,34 +1,76 @@
-// hooks/useSuggestion.ts
+import { useState, useEffect } from "react";
+import Fuse from "fuse.js";
+import mockProducts from "../data/products";
 
-import { useState, useEffect } from 'react';
-import mockProducts from '../data/products';
+type SuggestionItem = {
+  text: string;
+  type: "name" | "tag";
+  score: number;
+};
 
 export const useSuggestion = () => {
-  const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [query, setQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       if (query.length > 1) {
-        const lowerQuery = query.toLowerCase();
+        const fuse = new Fuse(mockProducts, {
+          keys: ["name", "tags"],
+          threshold: 0.6,
+          includeScore: true,
+          minMatchCharLength: 2,
+          distance: 1000,
+        });
 
-        // รวม name + tags แล้ว filter
-        const matches = mockProducts
-          .flatMap(product => [product.name, ...product.tags])
-          .filter(text => text.toLowerCase().includes(lowerQuery));
+        const results = fuse.search(query);
 
-        // ลบคำซ้ำ
-        const unique = Array.from(new Set(matches));
+        // กรองเฉพาะที่ score ต่ำพอ (match ดี)
+        const filtered = results.filter(
+          (r) => r.score !== undefined && r.score < 0.5
+        );
 
-        setSuggestions(unique.slice(0, 6)); // จำกัดจำนวนคำแนะนำ
+        // แปลงเป็น SuggestionItem[]
+        const raw: SuggestionItem[] = filtered.flatMap((r) => {
+          const nameMatch: SuggestionItem = {
+            text: r.item.name,
+            type: "name",
+            score: r.score ?? 0.4,
+          };
+
+          const tagMatches: SuggestionItem[] = Array.isArray(r.item.tags)
+            ? r.item.tags.map((tag) => ({
+                text: tag,
+                type: "tag",
+                score: r.score ?? 0.4,
+              }))
+            : [];
+
+          return [nameMatch, ...tagMatches];
+        });
+
+        // ลบคำซ้ำแบบฉลาด โดยใช้ score ต่ำสุด
+        const dedupedMap = new Map<string, SuggestionItem>();
+        for (const item of raw) {
+          const key = item.text.toLowerCase();
+          if (!dedupedMap.has(key) || item.score < dedupedMap.get(key)!.score) {
+            dedupedMap.set(key, item);
+          }
+        }
+
+        // ✅ เรียงตาม score จากน้อยไปมาก (แม่นที่สุดอยู่บนสุด)
+        const ranked = Array.from(dedupedMap.values()).sort(
+          (a, b) => a.score - b.score
+        );
+
+        setSuggestions(ranked.slice(0, 6));
       } else {
         setSuggestions([]);
       }
-    }, 300); // debounce
+    }, 300);
 
     return () => clearTimeout(timeout);
   }, [query]);
 
   return { query, setQuery, suggestions };
 };
-

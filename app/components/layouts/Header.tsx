@@ -1,10 +1,12 @@
-'use client';
+"use client";
 // Components/layout/Header.tsx
-import Link from 'next/link';
-import { useCart } from '../../contexts/CartContext';
-import { ShoppingCartIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import { useSuggestion } from '../../hooks/useSuggestion';
-
+import Link from "next/link";
+import { useCart } from "../../contexts/CartContext";
+import {
+  ShoppingCartIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+import { useSuggestion } from "../../hooks/useSuggestion";
 
 const Header = () => {
   const { cartLength } = useCart();
@@ -38,12 +40,11 @@ const Header = () => {
               {suggestions.length > 0 && (
                 <ul className="absolute top-full left-0 w-full bg-white text-black shadow-md rounded-md mt-1 z-10">
                   {suggestions.map((item, idx) => (
-                    <li
-                      key={idx}
-                      className="px-4 py-2 hover:bg-orange-100 cursor-pointer"
-                      onClick={() => setQuery(item)}
-                    >
-                      {item}
+                    <li key={idx} onClick={() => setQuery(item.text)}>
+                      <span className="font-medium">{item.text}</span>
+                      <span className="ml-2 text-xs text-gray-500">
+                        {item.type === "name" ? "ชื่อสินค้า" : "แท็กยอดนิยม"}
+                      </span>
                     </li>
                   ))}
                 </ul>

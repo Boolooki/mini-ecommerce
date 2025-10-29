@@ -1,3 +1,4 @@
+// app/data/products.js
 const mockProducts = [
   {
     id: '1',

@@ -5,6 +5,8 @@ import Header from "./components/layouts/Header";
 import ArsFooter from "./components/layouts/ArsFooter";
 import { CartProvider } from "./contexts/CartContext"; // Adjust path as needed
 import MainFooter from "./components/layouts/MainFooter";
+import SEOFooter from "./components/layouts/SEOFooter";
+import PayDelFooter from "./components/layouts/PayDelFooter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +35,8 @@ export default function RootLayout({
           <Header />
           {children}
           <MainFooter />
+          <PayDelFooter />
+          <SEOFooter />
           <ArsFooter />
         </CartProvider>
       </body>

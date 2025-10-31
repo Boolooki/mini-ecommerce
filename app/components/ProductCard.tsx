@@ -29,7 +29,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   return (
-    <div className="border rounded-lg shadow-sm bg-white p-4 hover:shadow-md transition duration-200">
+    <div className="border rounded-lg shadow-sm bg-white p-4 hover:shadow-md w-full h-[550px]">
       <Link href={`/products/${product.id}`}>
         <Image
           src={product.image}
@@ -64,11 +64,11 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
       </Link>
 
-      <div className="mt-4 flex justify-between items-center gap-2">
-        <div className="text-lg font-bold text-orange-600">
-          ฿{product.price.toLocaleString()}
-        </div>
+      <div className="text-lg font-bold text-orange-600 mt-4">
+        ฿{product.price.toLocaleString()}
+      </div>
 
+      <div className="mt-4">
         <div className="flex gap-2">
           <button
             onClick={() => addToCart(itemCart)}

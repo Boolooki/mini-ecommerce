@@ -104,4 +104,4 @@ const mockProducts = [
   },
 ];
 
-export default mockProducts;
+module.exports = mockProducts;

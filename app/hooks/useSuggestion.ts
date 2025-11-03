@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Fuse from "fuse.js";
-import mockProducts from "../data/products";
+import mockProducts from "../libs/products";
 
 type SuggestionItem = {
   text: string;

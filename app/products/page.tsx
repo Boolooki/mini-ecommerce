@@ -1,5 +1,4 @@
 "use client";
-import mockProducts from "@/app/data/products";
 import ProductCard from "@/app/components/ProductCard";
 import { usePriceRange } from "@/app/hooks/usePriceRange";
 import PriceFilter from "../components/products/PriceFilter";
@@ -10,9 +9,12 @@ import { useTagFilter } from "../hooks/useTagFilter";
 
 import StarFilter from "../components/products/StarFilter";
 import { useStarFilter } from "../hooks/useStarFilter";
+import { fetchProducts } from "../utils/fetchProducts";
+
+const products = await fetchProducts();
 
 const allTags = Array.from(
-  new Set(mockProducts.flatMap((product) => product.tags))
+  new Set(products.flatMap((product) => product.tags))
 );
 
 export default function Products() {
@@ -32,7 +34,7 @@ export default function Products() {
   const { selectedTags, toggleTag, showAll, toggleShowAll, visibleTags } =
     useTagFilter(allTags);
   const filteredProducts = filterProductsByTags(
-    mockProducts,
+    products,
     selectedTags
   ).filter((product) => isInRange(product.price) && (selectedRating == null || product.rating >= selectedRating));
   return (

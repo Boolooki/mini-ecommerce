@@ -1,14 +1,28 @@
-'use client';
+"use client";
 
-import { useCart } from '../contexts/CartContext';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function CartPage() {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
   const { cart, removeFromCart, updateQuantity } = useCart();
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push("/login");
+      console.log("Redirecting to login page as user is not authenticated.");
+    }
+  }, [isAuthenticated, router]);
+
   if (cart.length === 0) {
-    return <div className="p-4 text-center text-gray-500">ไม่มีสินค้าในตะกร้า</div>;
+    return (
+      <div className="p-4 text-center text-gray-500">ไม่มีสินค้าในตะกร้า</div>
+    );
   }
 
   return (
@@ -16,8 +30,11 @@ export default function CartPage() {
       <h1 className="text-xl font-semibold">ตะกร้าสินค้า</h1>
 
       <ul className="space-y-2">
-        {cart.map(item => (
-          <li key={item.id} className="flex justify-between items-center border-b pb-2">
+        {cart.map((item) => (
+          <li
+            key={item.id}
+            className="flex justify-between items-center border-b pb-2"
+          >
             <div>
               <div className="font-medium">{item.name}</div>
               <div className="text-sm text-gray-500">

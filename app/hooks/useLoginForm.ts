@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { loginSchema } from "@/app/schemas/auth";
+import { useAuth } from "@/app/contexts/AuthContext"
 
 export function useLoginForm() {
+  const { setToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -11,6 +13,7 @@ export function useLoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    
 
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
@@ -30,6 +33,8 @@ export function useLoginForm() {
       if (!res.ok) throw new Error(data.error || "เข้าสู่ระบบไม่สำเร็จ");
 
       // TODO: เก็บ token หรือ redirect
+      localStorage.setItem("token", data.token);
+      setToken(data.token);
       console.log("Login success:", data.token);
     } catch (err: any) {
       setError(err.message);

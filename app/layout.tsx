@@ -7,6 +7,7 @@ import { CartProvider } from "./contexts/CartContext"; // Adjust path as needed
 import MainFooter from "./components/layouts/MainFooter";
 import SEOFooter from "./components/layouts/SEOFooter";
 import PayDelFooter from "./components/layouts/PayDelFooter";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,15 +31,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <CartProvider>
-          <Header />
-          {children}
-          <MainFooter />
-          <PayDelFooter />
-          <SEOFooter />
-          <ArsFooter />
-        </CartProvider>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <AuthProvider>
+          <CartProvider>
+            <Header />
+            {children}
+            <MainFooter />
+            <PayDelFooter />
+            <SEOFooter />
+            <ArsFooter />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 "use client";
-// Components/layout/Header.tsx
+
 import Link from "next/link";
 import { useCart } from "../../contexts/CartContext";
 import {
@@ -7,10 +7,13 @@ import {
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { useSuggestion } from "../../hooks/useSuggestion";
+import { useAuth } from "@/app/contexts/AuthContext"; // ✅ เพิ่ม
 
 const Header = () => {
   const { cartLength } = useCart();
   const { query, setQuery, suggestions } = useSuggestion();
+  const { isAuthenticated, logout } = useAuth(); // ✅ ใช้ context
+
   return (
     <header className="sticky top-0 z-50 w-full bg-orange-500 text-white shadow-md">
       <nav className="container mx-auto px-4 py-3">
@@ -40,7 +43,11 @@ const Header = () => {
               {suggestions.length > 0 && (
                 <ul className="absolute top-full left-0 w-full bg-white text-black shadow-md rounded-md mt-1 z-10">
                   {suggestions.map((item, idx) => (
-                    <li key={idx} onClick={() => setQuery(item.text)}>
+                    <li
+                      key={idx}
+                      onClick={() => setQuery(item.text)}
+                      className="px-4 py-2 hover:bg-orange-100 cursor-pointer"
+                    >
                       <span className="font-medium">{item.text}</span>
                       <span className="ml-2 text-xs text-gray-500">
                         {item.type === "name" ? "ชื่อสินค้า" : "แท็กยอดนิยม"}
@@ -52,7 +59,7 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Right: Links + Cart */}
+          {/* Right: Links + Cart + Logout */}
           <div className="flex justify-end items-center gap-6">
             <Link href="/products" className="hover:text-gray-200">
               Products
@@ -66,6 +73,16 @@ const Header = () => {
                 </span>
               )}
             </Link>
+
+            {/* ✅ ปุ่ม Logout */}
+            {isAuthenticated && (
+              <button
+                onClick={logout}
+                className="text-sm bg-white text-orange-600 px-3 py-1 rounded hover:bg-orange-100 transition"
+              >
+                ออกจากระบบ
+              </button>
+            )}
           </div>
         </div>
       </nav>

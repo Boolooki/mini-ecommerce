@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { loginSchema } from "@/app/schemas/auth";
+import { useAuth } from "@/app/contexts/AuthContext"
 
 export function useLoginForm() {
+  const { setToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -10,15 +13,31 @@ export function useLoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    
+
+    const result = loginSchema.safeParse({ email, password });
+    if (!result.success) {
+      setError(result.error.issues[0].message);
+      setLoading(false);
+      return;
+    }
 
     try {
-      // TODO: เชื่อม Supabase Auth หรือ API login ที่นี่
-      console.log("Logging in with:", { email, password });
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: { "Content-Type": "application/json" },
+      });
 
-      // ตัวอย่าง: redirect หลัง login
-      // router.push("/dashboard");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "เข้าสู่ระบบไม่สำเร็จ");
+
+      // TODO: เก็บ token หรือ redirect
+      localStorage.setItem("token", data.token);
+      setToken(data.token);
+      console.log("Login success:", data.token);
     } catch (err: any) {
-      setError("Login failed. Please try again.");
+      setError(err.message);
     } finally {
       setLoading(false);
     }

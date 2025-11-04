@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { loginSchema } from "@/app/schemas/auth";
 
-export function useLoginForm() {
+export function useSignupForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -12,25 +12,19 @@ export function useLoginForm() {
     setLoading(true);
     setError("");
 
-    const result = loginSchema.safeParse({ email, password });
-    if (!result.success) {
-      setError(result.error.issues[0].message);
-      setLoading(false);
-      return;
-    }
-
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("/api/auth/signup", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, name }),
         headers: { "Content-Type": "application/json" },
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "เข้าสู่ระบบไม่สำเร็จ");
+      const result = await res.json();
 
-      // TODO: เก็บ token หรือ redirect
-      console.log("Login success:", data.token);
+      if (!res.ok) throw new Error(result.error || "Signup failed");
+
+      // TODO: redirect to login or dashboard
+      console.log("Signup success");
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -43,6 +37,8 @@ export function useLoginForm() {
     setEmail,
     password,
     setPassword,
+    name,
+    setName,
     loading,
     error,
     handleSubmit,

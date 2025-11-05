@@ -14,7 +14,7 @@ export default function CartPage() {
 
   useEffect(() => {
     if (!isAuthenticated) {
-      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      router.push("/login");
       console.log("Redirecting to login page as user is not authenticated.");
     }
   }, [isAuthenticated, router]);

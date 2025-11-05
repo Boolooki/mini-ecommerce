@@ -1,13 +1,12 @@
 "use client";
 
 import { useLoginForm } from "@/app/hooks/useLoginForm";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 export default function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirect") || "/";
+  const redirectTo = "/"
 
   const {
     email,

@@ -1,8 +1,14 @@
 import { useState } from "react";
 import { loginSchema } from "@/app/schemas/auth";
-import { useAuth } from "@/app/contexts/AuthContext"
+import { useAuth } from "@/app/contexts/AuthContext";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export function useLoginForm() {
+type Props = {
+  redirectTo: string;
+  router: AppRouterInstance;
+};
+
+export function useLoginForm({ redirectTo, router }: Props) {
   const { setToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,7 +19,6 @@ export function useLoginForm() {
     e.preventDefault();
     setLoading(true);
     setError("");
-    
 
     const result = loginSchema.safeParse({ email, password });
     if (!result.success) {
@@ -35,6 +40,7 @@ export function useLoginForm() {
       // TODO: เก็บ token หรือ redirect
       localStorage.setItem("token", data.token);
       setToken(data.token);
+      router.push(redirectTo);
       console.log("Login success:", data.token);
     } catch (err: any) {
       setError(err.message);

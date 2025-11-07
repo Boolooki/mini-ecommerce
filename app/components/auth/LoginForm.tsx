@@ -6,8 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const router = useRouter();
-  const redirectTo = "/"
-
+  
   const {
     email,
     setEmail,
@@ -16,7 +15,7 @@ export default function LoginForm() {
     loading,
     error,
     handleSubmit,
-  } = useLoginForm({ redirectTo, router });
+  } = useLoginForm({ router });
 
   return (
     <form

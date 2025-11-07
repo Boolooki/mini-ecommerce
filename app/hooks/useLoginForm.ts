@@ -4,16 +4,18 @@ import { useAuth } from "@/app/contexts/AuthContext";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 type Props = {
-  redirectTo: string;
   router: AppRouterInstance;
 };
 
-export function useLoginForm({ redirectTo, router }: Props) {
+export function useLoginForm({ router }: Props) {
+  
   const { setToken } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const redirectTo = "/"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +41,7 @@ export function useLoginForm({ redirectTo, router }: Props) {
 
       // TODO: เก็บ token หรือ redirect
       localStorage.setItem("token", data.token);
+      
       setToken(data.token);
       router.push(redirectTo);
       console.log("Login success:", data.token);

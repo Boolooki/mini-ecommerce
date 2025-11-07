@@ -12,7 +12,7 @@ import { useAuth } from "@/app/contexts/AuthContext"; // ✅ เพิ่ม
 const Header = () => {
   const { cartLength } = useCart();
   const { query, setQuery, suggestions } = useSuggestion();
-  const { isAuthenticated, logout } = useAuth(); // ✅ ใช้ context
+  const { isAuthenticated, logout, userRole } = useAuth(); // ✅ ใช้ context
 
   return (
     <header className="sticky top-0 z-50 w-full bg-orange-500 text-white shadow-md">
@@ -73,6 +73,30 @@ const Header = () => {
                 </span>
               )}
             </Link>
+
+            {/* ✅ ปุ่ม admin */}
+            {userRole === "admin" && (
+              <button
+                onClick={() => (window.location.href = "/admin")}
+                className="inline-flex items-center gap-2 text-sm font-medium text-white bg-orange-600 px-4 py-2 rounded-lg shadow hover:bg-orange-700 active:scale-95 transition-transform duration-150"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 12l2-2m0 0l7-7 7 7M13 5v6h6"
+                  />
+                </svg>
+                แดชบอร์ดผู้ดูแลระบบ
+              </button>
+            )}
 
             {/* ✅ ปุ่ม Logout */}
             {isAuthenticated && (

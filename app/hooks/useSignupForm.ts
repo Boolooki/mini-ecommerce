@@ -1,6 +1,8 @@
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function useSignupForm() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -24,6 +26,7 @@ export function useSignupForm() {
       if (!res.ok) throw new Error(result.error || "Signup failed");
 
       // TODO: redirect to login or dashboard
+      router.push("/login");
       console.log("Signup success");
     } catch (err: any) {
       setError(err.message);

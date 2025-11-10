@@ -1,5 +1,4 @@
 "use client";
-
 import { useSignupForm } from "@/app/hooks/useSignupForm";
 
 export default function SignupForm() {

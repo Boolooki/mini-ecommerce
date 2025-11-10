@@ -1,3 +1,4 @@
+// components/products/PriceFilter.tsx
 type PriceFilterProps = {
   minPrice: number;
   maxPrice: number;
@@ -12,66 +13,79 @@ export default function PriceFilter({
   setMaxPrice,
 }: PriceFilterProps) {
   return (
-    <div className="bg-white p-4 rounded shadow">
-      <h2 className="text-lg font-semibold mb-4">กรองตามช่วงราคา</h2>
+    <div>
+      <h3 className="text-base font-semibold text-gray-900 mb-4">ช่วงราคา</h3>
 
-      {/* 🔘 Slider */}
-      <div className="flex flex-col gap-4">
+      {/* Display Price Range */}
+      <div className="mb-6 p-4 bg-orange-50 rounded-lg border border-orange-100">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-gray-700 font-medium">
+            ฿{minPrice.toLocaleString()}
+          </span>
+          <span className="text-gray-400">-</span>
+          <span className="text-gray-700 font-medium">
+            ฿{maxPrice.toLocaleString()}
+          </span>
+        </div>
+      </div>
+
+      {/* Dual Range Slider */}
+      <div className="space-y-6 mb-6">
         <div>
-          <label className="text-sm text-gray-700">ราคาต่ำสุด:</label>
+          <label className="text-sm text-gray-600 mb-2 block">
+            ราคาต่ำสุด: ฿{minPrice.toLocaleString()}
+          </label>
           <input
             type="range"
             min={0}
             max={maxPrice}
-            step={100}
+            step={500}
             value={minPrice}
             onChange={(e) => setMinPrice(Number(e.target.value))}
-            className="w-full accent-orange-500"
+            className="w-full h-2 bg-orange-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
           />
         </div>
 
         <div>
-          <label className="text-sm text-gray-700">ราคาสูงสุด:</label>
+          <label className="text-sm text-gray-600 mb-2 block">
+            ราคาสูงสุด: ฿{maxPrice.toLocaleString()}
+          </label>
           <input
             type="range"
             min={minPrice}
             max={100000}
-            step={100}
+            step={500}
             value={maxPrice}
             onChange={(e) => setMaxPrice(Number(e.target.value))}
-            className="w-full accent-orange-500"
+            className="w-full h-2 bg-orange-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
           />
         </div>
       </div>
 
-      {/* 💬 Input */}
-      <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+      {/* Manual Input */}
+      <div className="grid grid-cols-2 gap-3">
         <div>
-          <label htmlFor="minInput" className="block mb-1 text-gray-700">
-            ราคาต่ำสุด
-          </label>
+          <label className="text-xs text-gray-600 mb-1 block">ต่ำสุด</label>
           <input
-            id="minInput"
             type="number"
             min={0}
             max={maxPrice}
+            step={500}
             value={minPrice}
             onChange={(e) => setMinPrice(Number(e.target.value))}
-            className="w-full px-2 py-1 border rounded"
+            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
           />
         </div>
         <div>
-          <label htmlFor="maxInput" className="block mb-1 text-gray-700">
-            ราคาสูงสุด
-          </label>
+          <label className="text-xs text-gray-600 mb-1 block">สูงสุด</label>
           <input
-            id="maxInput"
             type="number"
             min={minPrice}
             max={100000}
+            step={500}
             value={maxPrice}
             onChange={(e) => setMaxPrice(Number(e.target.value))}
-            className="w-full px-2 py-1 border rounded"
+            className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
           />
         </div>
       </div>

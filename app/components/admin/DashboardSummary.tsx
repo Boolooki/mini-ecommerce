@@ -1,3 +1,4 @@
+//app/components/admin/DashboardSummary.tsx
 export default function DashboardSummary() {
   // mock data — later fetch from Supabase
   const stats = {

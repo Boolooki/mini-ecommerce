@@ -14,6 +14,7 @@ import {
   CalendarIcon,
   BanknotesIcon,
 } from "@heroicons/react/24/outline";
+import { useAuth } from "../contexts/AuthContext";
 
 interface Stats {
   totalSales: number;
@@ -40,6 +41,13 @@ export default function AdminDashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [loading, setLoading] = useState(true);
+  const role = useAuth().userRole;
+
+  useEffect(() => {
+    if (role !== "admin") {
+      window.location.href = "/";
+    }
+  }, [role]);
 
   useEffect(() => {
     loadDashboardData();

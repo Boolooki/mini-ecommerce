@@ -8,7 +8,6 @@ import {
   CubeIcon,
   ClockIcon,
   TruckIcon,
-  CheckCircleIcon,
   ArrowTrendingUpIcon,
   ArrowPathIcon,
   CalendarIcon,
@@ -57,12 +56,10 @@ export default function AdminDashboardPage() {
     try {
       setLoading(true);
       
-      // Load stats
       const statsResponse = await fetch("/api/admin/stats");
       const statsData = await statsResponse.json();
       setStats(statsData.stats);
 
-      // Load recent orders
       const ordersResponse = await fetch("/api/admin/recent-orders");
       const ordersData = await ordersResponse.json();
       setRecentOrders(ordersData.orders || []);
